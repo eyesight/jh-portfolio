@@ -1,0 +1,33 @@
+---
+import Navigation from './Navigation.astro';
+
+---
+
+<header class="header">
+  <div class="logo">
+    <a class="logo__link" href="/">Creating <br>digital <br>solutions <br>that matter</a>
+  </div>
+  <Navigation />
+</header>
+
+<style>
+  .header {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    max-width: var(--layout-max-width);
+    padding: var(--layout-padding-y) var(--layout-padding-x);
+  }
+
+  .logo__link {
+    font-weight: var(--font-weight-semi-bold);
+    font-size: var(--font-size-55);
+    line-height: 1;
+    color: var(--color-bg-dark);
+    text-decoration: none;
+  }
+</style>

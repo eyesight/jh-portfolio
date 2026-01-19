@@ -1,0 +1,5 @@
+@mixin fake-margin-bottom($margin: $gutter, $selector: '*') {
+	& + #{$selector} {
+		margin-top: $margin;
+	}
+}

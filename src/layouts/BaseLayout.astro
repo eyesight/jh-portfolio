@@ -1,0 +1,76 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.scss";
+const { pageTitle } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <Header />
+    <main class="main-content">
+      <h1>{pageTitle}</h1>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+  <style>
+    .main-content {
+      margin-top: calc(436 / 16 * 1rem);
+      justify-content: space-between;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.getBoundingClientRect().height : 0;
+
+      let lastY = window.scrollY;
+      let ticking = false;
+
+      function update() {
+        const currentY = window.scrollY;
+
+        // at-top class when within header height from top
+        if (currentY <= headerHeight) {
+          body.classList.add('at-top');
+        } else {
+          body.classList.remove('at-top');
+        }
+
+        // scroll direction classes
+        if (currentY > lastY) {
+          body.classList.add('scroll-down');
+          body.classList.remove('scroll-up');
+        } else if (currentY < lastY) {
+          body.classList.add('scroll-up');
+          body.classList.remove('scroll-down');
+        }
+
+        lastY = currentY;
+        ticking = false;
+      }
+
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // initialize state
+      update();
+    })();
+  </script>
+</html>

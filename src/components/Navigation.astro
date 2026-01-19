@@ -1,0 +1,141 @@
+---
+
+---
+
+<nav class="main-nav" aria-label="Main navigation">
+  <button id="menu-toggle" class="main-nav__toggle" aria-label="Toggle menu">
+    Menü
+  </button>
+  <div id="main-menu" class="main-nav__links">
+    <a class="main-nav__link" href="/">Overview</a>
+    <a class="main-nav__link" href="/blog">Projekte</a>
+    <a class="main-nav__link" href="/about">About</a>
+    <a class="main-nav__link" href="/contact">Kontakt</a>
+  </div>
+</nav>
+<style>
+  .main-nav {
+    text-align: right;
+  }
+  
+  .main-nav__toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    display: inline-block; /* ensure toggle takes layout space by default */
+  }
+
+  .main-nav__link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .main-nav__toggle,
+  .main-nav__link {
+    color: var(--color-typo-grey-lighter);
+    font-size: var(--font-size-30);
+    font-weight: var(--font-weight-semi-bold);
+    padding: 0 10px;
+    margin-right: -10px;
+  }
+
+  .main-nav__links {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.5s cubic-bezier(.2,.8,.2,1), opacity 0.4s ease;
+    will-change: max-height, opacity;
+  }
+
+  .main-nav__links.open {
+    max-height: 1000px; /* large enough to contain links; adjust if needed */
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* When the page is at the top: hide the toggle and show the navigation, freeing the space */
+  /* ensure the nav is a positioning context so we can absolutely position the toggle when hidden */
+  .main-nav {
+    position: relative;
+  }
+
+  /* ensure the toggle can animate (define transition on the base element) */
+  .main-nav__toggle {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  /* fade the toggle out softly and remove it from document flow (no layout space) */
+  body.at-top .main-nav__toggle {
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  /* show the links with the existing transitions (fade + max-height) */
+  body.at-top .main-nav__links {
+    max-height: 1000px; /* large enough to contain links */
+    opacity: 1;
+    pointer-events: auto;
+    overflow: visible;
+    /* use the .main-nav__links transitions already declared above for smooth fade/expand */
+  }
+</style>
+<script>
+  (() => {
+    if (typeof window === "undefined") return;
+
+    const init = () => {
+      const menuToggle = document.getElementById("menu-toggle");
+      const mainMenu = document.getElementById("main-menu");
+      if (!menuToggle || !mainMenu) return;
+
+      if (!menuToggle.hasAttribute("aria-expanded")) {
+        menuToggle.setAttribute("aria-expanded", "false");
+      }
+
+      const openMenu = () => {
+        menuToggle.setAttribute("aria-expanded", "true");
+        mainMenu.classList.add("open");
+      };
+
+      const closeMenu = () => {
+        menuToggle.setAttribute("aria-expanded", "false");
+        mainMenu.classList.remove("open");
+      };
+
+      menuToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const expanded = menuToggle.getAttribute("aria-expanded") === "true";
+        if (expanded) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        const target = e.target as Node | null;
+        if (!mainMenu.contains(target) && target !== menuToggle) {
+          closeMenu();
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMenu();
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>

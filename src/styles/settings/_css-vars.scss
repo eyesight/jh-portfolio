@@ -1,0 +1,38 @@
+@use "./functions" as f;
+
+:root {
+  // Color variables
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-bg-light: #d9dacd;
+  --color-bg-dark: #2e2d2d;
+  --color-typo-grey-on-light-bg: #505050;
+  --color-typo-grey-lighter: #8d8d8d;
+  --color-action-3: #fbff47;
+  --color-text: #111;
+
+  // Spacing variables
+  --space-200: #{f.rem(200px)};
+
+  // Layout variables
+  --layout-max-width: #{f.rem(2000px)};
+  --layout-padding-x: 50px;
+  --layout-padding-y: 36px;
+
+  // Font size variables
+  --font-size-20: #{f.rem(20px)};
+  --font-size-30: #{f.rem(30px)};
+  --font-size-55: #{f.rem(55px)};
+
+  // Font weight variables
+  --font-weight-regular: 400;
+  --font-weight-semi-bold: 600;
+
+  // font family variables
+  --font-family-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+} 
+
+// [data-theme="dark"] {
+//   --color-bg: #0f172a;
+//   --color-text: #f8fafc;
+// }
