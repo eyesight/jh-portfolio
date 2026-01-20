@@ -23,8 +23,8 @@ const { pageTitle } = Astro.props;
   </body>
   <style>
     .main-content {
-      margin-top: calc(436 / 16 * 1rem);
       justify-content: space-between;
+      padding: var(--layout-padding-y) var(--layout-padding-x);
     }
   </style>
 
@@ -32,7 +32,7 @@ const { pageTitle } = Astro.props;
     (function () {
       const body = document.body;
       const header = document.querySelector('header');
-      const headerHeight = header ? header.getBoundingClientRect().height : 0;
+      const headerHeight = 200;
 
       let lastY = window.scrollY;
       let ticking = false;

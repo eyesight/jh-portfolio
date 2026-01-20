@@ -16,6 +16,11 @@
 <style>
   .main-nav {
     text-align: right;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    padding: var(--layout-padding-y) var(--layout-padding-x);
   }
   
   .main-nav__toggle {
@@ -53,12 +58,6 @@
     max-height: 1000px; /* large enough to contain links; adjust if needed */
     opacity: 1;
     pointer-events: auto;
-  }
-
-  /* When the page is at the top: hide the toggle and show the navigation, freeing the space */
-  /* ensure the nav is a positioning context so we can absolutely position the toggle when hidden */
-  .main-nav {
-    position: relative;
   }
 
   /* ensure the toggle can animate (define transition on the base element) */

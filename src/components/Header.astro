@@ -14,7 +14,7 @@ import Navigation from './Navigation.astro';
   .header {
     display: flex;
     justify-content: space-between;
-    position: fixed;
+    position: relative;
     width: 100%;
     left: 0;
     right: 0;
@@ -25,9 +25,57 @@ import Navigation from './Navigation.astro';
 
   .logo__link {
     font-weight: var(--font-weight-semi-bold);
-    font-size: var(--font-size-55);
+    font-size: var(--nav-dynamic-size, var(--font-size-logo));
     line-height: 1;
     color: var(--color-bg-dark);
     text-decoration: none;
   }
 </style>
+<script>
+    (function () {
+    if (typeof window === "undefined") return;
+
+    const MIN_SIZE_PX = 55; // minimum font-size in px
+    let startSize = window.innerHeight * 0.2; // 20% of viewport height in px
+    let maxScroll = window.innerHeight * 0.2; // scroll distance over which the font shrinks
+
+    const setSize = (px: number) => {
+      document.documentElement.style.setProperty("--nav-dynamic-size", px + "px");
+    };
+
+    const update = () => {
+      const scroll = Math.min(window.scrollY, maxScroll);
+      const t = maxScroll === 0 ? 0 : scroll / maxScroll;
+      // linear interpolation from startSize (t=0) to MIN_SIZE_PX (t=1)
+      const size = Math.max(MIN_SIZE_PX, startSize - (startSize - MIN_SIZE_PX) * t);
+      setSize(Math.round(size));
+    };
+
+    const onResize = () => {
+      startSize = window.innerHeight * 0.2;
+      maxScroll = window.innerHeight * 0.2;
+      update();
+    };
+
+    let raf: number | null = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+      update();
+      raf = null;
+      });
+    };
+
+    const init = () => {
+      update();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onResize);
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+    })();
+  </script>
