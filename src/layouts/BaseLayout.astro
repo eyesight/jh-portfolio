@@ -16,6 +16,7 @@ const { pageTitle } = Astro.props;
   <body>
     <Header />
     <main class="main-content">
+      <div class="logo logo--placeholder" aria-hidden="true"></div>
       <h1>{pageTitle}</h1>
       <slot />
     </main>
@@ -26,13 +27,18 @@ const { pageTitle } = Astro.props;
       justify-content: space-between;
       padding: var(--layout-padding-y) var(--layout-padding-x);
     }
+
+    .logo--placeholder {
+      opacity: 0;
+    }
   </style>
 
   <script>
     (function () {
       const body = document.body;
-      const header = document.querySelector('header');
-      const headerHeight = 200;
+      const logoPlaceholder = document.querySelector(".logo--placeholder") as HTMLElement;
+      const logo = document.querySelector(".logo") as HTMLElement;
+      const headerHeight = 220;
 
       let lastY = window.scrollY;
       let ticking = false;
@@ -42,18 +48,31 @@ const { pageTitle } = Astro.props;
 
         // at-top class when within header height from top
         if (currentY <= headerHeight) {
-          body.classList.add('at-top');
+          body.classList.add("at-top");
         } else {
-          body.classList.remove('at-top');
+          body.classList.remove("at-top");
         }
 
         // scroll direction classes
         if (currentY > lastY) {
-          body.classList.add('scroll-down');
-          body.classList.remove('scroll-up');
+          body.classList.add("scroll-down");
+          body.classList.remove("scroll-up");
         } else if (currentY < lastY) {
-          body.classList.add('scroll-up');
-          body.classList.remove('scroll-down');
+          body.classList.add("scroll-up");
+          body.classList.remove("scroll-down");
+        }
+
+        // logo-placeholder
+        if (logoPlaceholder && logo) {
+          const logoHeight = logo.offsetHeight;
+          const maxHeight = logoHeight + headerHeight;
+          const newHeight = logoHeight + currentY;
+          
+          if (currentY <= headerHeight) {
+            logoPlaceholder.style.height = newHeight + "px";
+          } else {
+            logoPlaceholder.style.height = maxHeight + "px";
+          }
         }
 
         lastY = currentY;
@@ -67,7 +86,7 @@ const { pageTitle } = Astro.props;
         }
       }
 
-      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener("scroll", onScroll, { passive: true });
 
       // initialize state
       update();
