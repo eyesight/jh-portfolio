@@ -38,10 +38,11 @@ const { pageTitle } = Astro.props;
       const body = document.body;
       const logoPlaceholder = document.querySelector(".logo--placeholder") as HTMLElement;
       const logo = document.querySelector(".logo") as HTMLElement;
+      const calc = 3
       
       const mainNav = document.querySelector(".main-nav") as HTMLElement;
       const mainNavElements = mainNav.querySelectorAll(".main-nav__link-wrapper") as NodeListOf<HTMLElement>;
-      const headerHeight = Array.from(mainNavElements).reduce((total, element) => total + element.offsetHeight, 0);
+      const headerHeight = Array.from(mainNavElements).reduce((total, element) => total + element.offsetHeight, 0) * calc;
       console.log("Header height:", headerHeight);
       
       mainNavElements.forEach((element, index) => {
@@ -49,12 +50,12 @@ const { pageTitle } = Astro.props;
 
         // Calculate cumulative height up to this element
         for (let i = 1; i < index; i++) {
-            cumulativeHeight += mainNavElements[i].offsetHeight;
+        cumulativeHeight += mainNavElements[i].offsetHeight;
         }
 
         function updatePosition() {
           const currentY = window.scrollY;
-          const translateY = Math.min(currentY, cumulativeHeight);
+          const translateY = Math.min(currentY / calc, cumulativeHeight);
           element.style.transform = `translateY(-${translateY}px)`;
         }
 
