@@ -38,7 +38,29 @@ const { pageTitle } = Astro.props;
       const body = document.body;
       const logoPlaceholder = document.querySelector(".logo--placeholder") as HTMLElement;
       const logo = document.querySelector(".logo") as HTMLElement;
-      const headerHeight = 220;
+      
+      const mainNav = document.querySelector(".main-nav") as HTMLElement;
+      const mainNavElements = mainNav.querySelectorAll(".main-nav__link-wrapper") as NodeListOf<HTMLElement>;
+      const headerHeight = Array.from(mainNavElements).reduce((total, element) => total + element.offsetHeight, 0);
+      console.log("Header height:", headerHeight);
+      
+      mainNavElements.forEach((element, index) => {
+        let cumulativeHeight = 0;
+
+        // Calculate cumulative height up to this element
+        for (let i = 1; i < index; i++) {
+            cumulativeHeight += mainNavElements[i].offsetHeight;
+        }
+
+        function updatePosition() {
+          const currentY = window.scrollY;
+          const translateY = Math.min(currentY, cumulativeHeight);
+          element.style.transform = `translateY(-${translateY}px)`;
+        }
+
+        window.addEventListener("scroll", updatePosition, { passive: true });
+        updatePosition();
+      });
 
       let lastY = window.scrollY;
       let ticking = false;
